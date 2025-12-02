@@ -6,7 +6,7 @@ RUN adduser -D pixivnotifs
 USER pixivnotifs
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/home/kakigoori/.local/bin/:$PATH"
+ENV PATH="/home/pixivnotifs/.local/bin/:$PATH"
 
 WORKDIR /pixivnotifs
 
