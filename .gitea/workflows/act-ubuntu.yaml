@@ -1,6 +1,8 @@
 name: Build act-ubuntu Docker image
 
 on:
+  schedule:
+    - cron: "0 3 * * 1"
   workflow_dispatch:
   push:
     branches: ["main"]
