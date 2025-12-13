@@ -15,7 +15,7 @@ import dateutil.parser
 import glob
 import os
 
-s = smtplib.SMTP(os.environ["SMTP_HOST"], port=os.environ["SMTP_PORT"])
+s = smtplib.SMTP(os.environ["SMTP_HOST"], port=int(os.environ["SMTP_PORT"]))
 s.starttls()
 s.login(os.environ["SMTP_USERNAME"], os.environ["SMTP_PASSWORD"])
 
@@ -99,7 +99,7 @@ for x in response["illusts"]:
 
     subprocess.run(
         [
-            ".venv/bin/gallery-dl", "-d", os.environ["GALLERY_DL_FOLDER"], "--write-metadata", f"https://pixiv.net/artworks/{x['id']}"
+            ".venv/bin/gallery-dl", "-d", os.environ["GALLERY_DL_FOLDER"], "--write-metadata", "-o", "refresh-token=" + os.environ["PIXIV_REFRESH_TOKEN"], f"https://pixiv.net/artworks/{x['id']}"
         ]
     )
     
