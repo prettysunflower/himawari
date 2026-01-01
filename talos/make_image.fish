@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-set TALOS_VERSION v1.11.5
+set TALOS_VERSION v1.12.0
 set ARCH amd64
 set EXTENSIONS "$(crane export ghcr.io/siderolabs/extensions:$TALOS_VERSION | tar x -O image-digests)"
 
@@ -50,9 +50,9 @@ cd ..
 
 docker run --rm -t -v /dev:/dev --privileged \
     -v "$PWD/_out:/out" "ghcr.io/siderolabs/imager:$TALOS_VERSION" installer --arch "$ARCH" \
-    --system-extension-image (echo $EXTENSIONS | grep "iscsi-tools") \
-    --system-extension-image (echo $EXTENSIONS | grep "qemu-guest-agent") \
-    --system-extension-image (echo $EXTENSIONS | grep "util-linux-tools") \
+    --system-extension-image (echo $EXTENSIONS | grep "/iscsi-tools") \
+    --system-extension-image (echo $EXTENSIONS | grep "/qemu-guest-agent") \
+    --system-extension-image (echo $EXTENSIONS | grep "/util-linux-tools") \
     --system-extension-image git.prettysunflower.moe/prettysunflower/talos-tailscale:$TAILSCALE
 
 set IMAGE_NAME git.prettysunflower.moe/prettysunflower/talos:$TALOS_VERSION-tailscale-$TAILSCALE
