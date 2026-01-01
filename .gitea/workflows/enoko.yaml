@@ -1,0 +1,35 @@
+name: Build Enoko
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    tags: [ "*" ]
+    paths:
+      - enoko/**
+
+jobs:
+  acls:
+    runs-on: ubuntu-latest-prettysunflower
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.5'
+
+      - uses: ko-build/setup-ko@v0.8
+        with:
+          version: v0.18.0
+        env:
+          KO_DOCKER_REPO: git.prettysunflower.moe/prettysunflower
+      
+      - env:
+          auth_token: ${{ secrets.HUB_TOKEN }}
+        run: |
+          echo "${auth_token}" | ko login git.prettysunflower.moe --username ${{ vars.HUB_USERNAME }} --password-stdin
+          ko build -B
