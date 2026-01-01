@@ -9,8 +9,12 @@ on:
       - enoko/**
 
 jobs:
-  acls:
+  enoko:
     runs-on: ubuntu-latest-prettysunflower
+
+    defaults:
+      run:
+        working-directory: ./enoko
 
     steps:
       -
