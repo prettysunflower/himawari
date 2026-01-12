@@ -1,3 +1,15 @@
+# Building sops as age post-quantum support was not yet released on the stable version
+FROM golang:1.25-alpine AS sops-builder
+
+WORKDIR /root
+
+RUN apk add git
+RUN git clone https://github.com/getsops/sops
+
+WORKDIR /root/sops
+
+RUN go build ./cmd/sops
+
 FROM docker.io/gitea/runner-images:ubuntu-latest
 
 # Add kubectl and dependencies for infra
@@ -18,10 +30,10 @@ RUN rustup toolchain install nightly
 
 # Add DNSControl and SOPS (infra)
 
+COPY --from=sops-builder /root/sops/sops /usr/bin/sops
 RUN curl -LO https://github.com/StackExchange/dnscontrol/releases/download/v4.27.1/dnscontrol-4.27.1.amd64.deb
-RUN curl -LO https://github.com/getsops/sops/releases/download/v3.11.0/sops_3.11.0_amd64.deb
-RUN apt install -y ./sops_3.11.0_amd64.deb ./dnscontrol-4.27.1.amd64.deb
-RUN rm ./sops_3.11.0_amd64.deb ./dnscontrol-4.27.1.amd64.deb
+RUN apt install -y ./dnscontrol-4.27.1.amd64.deb
+RUN rm ./dnscontrol-4.27.1.amd64.deb
 
 # Add composer
 # https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
